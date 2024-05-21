@@ -1,95 +1,52 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client"
+import { Box, Container, CssBaseline, ThemeProvider, Typography } from "@mui/material";
+import theme from "./theme/theme";
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
+  const containerRef = useRef();
+  const contentRef = useRef()
+  const [width, setWidth] = useState(0)
+  const [contentWidth, setContentWidth] = useState(0)
+  useEffect(() => {
+    const calcWidth = () => {
+      if (containerRef.current) {
+        setWidth(containerRef.current.offsetWidth)
+      }
+      if (contentRef.current) {
+        setContentWidth(contentRef.current.offsetWidth)
+      }
+    }
+    calcWidth()
+    window.addEventListener("resize", calcWidth)
+    return () => {
+      window.removeEventListener("resize", calcWidth)
+    }
+  }, [])
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <>
+      <CssBaseline />
+      <ThemeProvider theme={theme}>
+        <Container ref={containerRef} sx={{ background: "#C3CF8B" }}>
+          <Box ref={contentRef} sx={{ background: "gray", height: "100vh", pt: 5 }}>
+            <Typography sx={{ fontSize: 40, fontWeight: 600, textAlign: "center" }}>⬅️Container width:{width}px➡️</Typography>
+            <Typography sx={{ fontSize: 40, fontWeight: 600, textAlign: "center" }}>⬅️Content width:{contentWidth}px➡️</Typography>
+            <Box sx={{
+              position: "relative",
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+              fontSize: { md: 40, sm: 30, xs: 20, xxs: 15 },
+              '&:before': {
+                position: "absolute",
+                top: 0,
+                left: "50%",
+                transform: "translateX(-50%)",
+                textAlign: "center",
+                content: { xl: `"Screen size xl"`, lg: `"Screen size lg"`, md: `"Screen size md"`, sm: `"Screen size sm"`, xs: `"Screen size xs"`, xxs: `"Screen size xxs"` }
+              }
+            }}></Box>
+          </Box>
+        </Container>
+      </ThemeProvider>
+    </>
   );
 }
